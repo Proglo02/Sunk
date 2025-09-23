@@ -14,11 +14,15 @@ public class BallInitializer : MonoBehaviour
             BallObject cueBall = Instantiate(cueBallObject, data.Position, data.Rotation).GetComponent<BallObject>();
             cueBall.BallData = data.Ball.Data;
             cueBall.SetMaterial(data.Ball.Data.Material);
+            cueBall.transform.parent = transform;
+            BallManager.Instance.AddBall(cueBall);
             return;
         }
 
         BallObject newBall = Instantiate(ballObject, data.Position, data.Rotation).GetComponent<BallObject>();
         newBall.BallData = data.Ball.Data;
         newBall.SetMaterial(data.Ball.Data.Material);
+        newBall.transform.parent = transform;
+        BallManager.Instance.AddBall(newBall);
     }
 }

@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BallInitializer))]
-public class GameManager : MonoBehaviour
+public class GameManager : Singelton<GameManager>
 {
-    [SerializeField] private BallLayout ballLayout;
+    public bool PlayerIsActive { get; set; } = true;
 
-    private BallInitializer ballInitializer;
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         GetComponents();
+        BindEvents();
     }
 
     private void Start()
@@ -21,19 +21,21 @@ public class GameManager : MonoBehaviour
 
     private void GetComponents()
     {
-        ballInitializer = GetComponent<BallInitializer>();
+
+    }
+
+    private void BindEvents()
+    {
+        BallManager.Instance.OnAllBallsStopped.AddListener(OnAllBallsStopped);
     }
 
     private void StartGame()
     {
-        InitalizeBalls();
+        BallManager.Instance.InitalizeBalls();
     }
 
-    private void InitalizeBalls()
+    private void OnAllBallsStopped()
     {
-        foreach(var layoutData in ballLayout.Balls)
-        {
-            ballInitializer.InitializeBall(layoutData);
-        }
+        PlayerIsActive = true;
     }
 }
