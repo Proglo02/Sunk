@@ -1,5 +1,110 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5664558972507628459
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 558621818037587974}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cc67479a4107f834fb6af86487b2a519, type: 2}
+    - target: {fileID: 919132149155446097, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+        type: 3}
+      propertyPath: m_Name
+      value: AimTarget
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a9266edd98af70e4bb5a34d51dedf7a6, type: 3}
+--- !u!1 &4782232978314796794 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5664558972507628459}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5266457437370369088 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a9266edd98af70e4bb5a34d51dedf7a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5664558972507628459}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6247680443908695875
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61,12 +166,16 @@ PrefabInstance:
     - target: {fileID: 7434010954292261754, guid: 7a7b8f4dea7c2974db76d796ec48d956,
         type: 3}
       propertyPath: m_Name
-      value: CueBall
+      value: CueBallObject
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6676721423375424869, guid: 7a7b8f4dea7c2974db76d796ec48d956, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5869500753726207813, guid: 7a7b8f4dea7c2974db76d796ec48d956,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5266457437370369088}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7434010954292261754, guid: 7a7b8f4dea7c2974db76d796ec48d956,
         type: 3}
@@ -77,6 +186,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2547920039583732111}
   m_SourcePrefab: {fileID: 100100000, guid: 7a7b8f4dea7c2974db76d796ec48d956, type: 3}
+--- !u!4 &558621818037587974 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5869500753726207813, guid: 7a7b8f4dea7c2974db76d796ec48d956,
+    type: 3}
+  m_PrefabInstance: {fileID: 6247680443908695875}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3575525847402468409 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7434010954292261754, guid: 7a7b8f4dea7c2974db76d796ec48d956,
@@ -98,6 +213,8 @@ MonoBehaviour:
   BallData:
     Number: 0
     Material: {fileID: 0}
+  aimTarget: {fileID: 4782232978314796794}
+  IsAiming: 1
 --- !u!114 &2547920039583732111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,19 +242,11 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 717d96b5-549d-4852-b449-0bdbf4f83da3
-    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 6c0f703d-2ba1-4758-9001-0538bdf3f23e
-    m_ActionName: Player/Look[/Mouse/delta]
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6048265930351795588}
-        m_TargetAssemblyTypeName: CueBall, Assembly-CSharp
-        m_MethodName: FireBall
-        m_Mode: 1
+        m_TargetAssemblyTypeName: CueBallObject, Assembly-CSharp
+        m_MethodName: SetAimDegree
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -146,8 +255,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: eff9780a-f04a-42b6-bed4-6a1bdc137b25
-    m_ActionName: Player/Fire[/Mouse/leftButton]
+    m_ActionId: 717d96b5-549d-4852-b449-0bdbf4f83da3
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 08369944-9779-4432-82a2-3b2d7b27ea01
@@ -188,6 +297,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 18182666-a378-44d9-bc1d-147e2b3b9602
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6048265930351795588}
+        m_TargetAssemblyTypeName: CueBallObject, Assembly-CSharp
+        m_MethodName: SetAimCardinal
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d638984a-fe9b-4605-8b30-5bf5e4bd514e
+    m_ActionName: Player/RotateCardinal
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6048265930351795588}
+        m_TargetAssemblyTypeName: CueBallObject, Assembly-CSharp
+        m_MethodName: FireBall
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 52988bfb-e579-4d17-a9ff-d89054cb4354
+    m_ActionName: Player/Fire[/Mouse/leftButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
