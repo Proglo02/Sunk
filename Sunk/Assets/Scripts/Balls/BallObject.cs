@@ -5,20 +5,22 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody))]
 public class BallObject : MonoBehaviour
 {
+    [SerializeField] private float freezeVelocity = .2f;
+
     public BallData BallData;
     public bool IsMoving { get; protected set; } = false;
 
     protected Rigidbody rigidBody;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         GetComponents();
     }
 
     protected virtual void FixedUpdate()
     {
-        DoGroundCheck();
-        DoMotionCheck();
+        if(DoGroundCheck())
+            DoMotionCheck();
     }
 
     public void SetMaterial(Material material)
@@ -31,18 +33,30 @@ public class BallObject : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
     }
 
-    private void DoGroundCheck()
+    private bool DoGroundCheck()
     {
         Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.6f);
 
         if (hit.collider != null && hit.collider.CompareTag("Table"))
         {
             transform.position = new Vector3(transform.position.x, hit.point.y + 0.4f, transform.position.z);
+            return true;
         }
+
+        return false;
     }
 
     private void DoMotionCheck()
     {
-        IsMoving = rigidBody.velocity.magnitude > .135f;
+        // Check if it's still moving but below the threshold
+        if (IsMoving && rigidBody.angularVelocity.magnitude < freezeVelocity && rigidBody.velocity.magnitude < freezeVelocity)
+        {
+            rigidBody.velocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
+            rigidBody.Sleep();
+            IsMoving = false;
+        }
+        else
+            IsMoving = rigidBody.angularVelocity.magnitude > .13f || rigidBody.velocity.magnitude > .2f;
     }
 }

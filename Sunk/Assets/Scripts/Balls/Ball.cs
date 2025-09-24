@@ -4,9 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public enum BallType
+{
+    Solid,
+    Striped,
+    Cue,
+    Ball8,
+    None
+}
+
+[Serializable]
 public struct BallData
 {
     public int Number;
+    public BallType BallType;
     public Material Material;
 }
 

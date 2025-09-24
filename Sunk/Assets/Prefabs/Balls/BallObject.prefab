@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025fff63741be7e4e876da3e295cba37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  freezeVelocity: 0.3
   BallData:
     Number: 0
     Material: {fileID: 0}

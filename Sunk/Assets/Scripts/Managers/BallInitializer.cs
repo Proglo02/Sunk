@@ -9,20 +9,26 @@ public class BallInitializer : MonoBehaviour
 
     public void InitializeBall(BallLayoutData data)
     {
-        if(data.Ball.Data.Number == 0)
+        switch(data.Ball.Data.BallType)
         {
-            BallObject cueBall = Instantiate(cueBallObject, data.Position, data.Rotation).GetComponent<BallObject>();
-            cueBall.BallData = data.Ball.Data;
-            cueBall.SetMaterial(data.Ball.Data.Material);
-            cueBall.transform.parent = transform;
-            BallManager.Instance.AddBall(cueBall);
-            return;
-        }
+            case BallType.Cue:
+            {
+                CueBallObject cueBall = Instantiate(cueBallObject, data.Position, data.Rotation).GetComponent<CueBallObject>();
+                cueBall.BallData = data.Ball.Data;
+                cueBall.SetMaterial(data.Ball.Data.Material);
+                cueBall.transform.parent = transform;
+                BallManager.Instance.AddBall(cueBall);
+                BallManager.Instance.AddCueBall(cueBall);
+            }break;
+            default:
+            {
+                BallObject newBall = Instantiate(ballObject, data.Position, data.Rotation).GetComponent<BallObject>();
+                newBall.BallData = data.Ball.Data;
+                newBall.SetMaterial(data.Ball.Data.Material);
+                newBall.transform.parent = transform;
+                BallManager.Instance.AddBall(newBall);
+            }break;
 
-        BallObject newBall = Instantiate(ballObject, data.Position, data.Rotation).GetComponent<BallObject>();
-        newBall.BallData = data.Ball.Data;
-        newBall.SetMaterial(data.Ball.Data.Material);
-        newBall.transform.parent = transform;
-        BallManager.Instance.AddBall(newBall);
+        }
     }
 }

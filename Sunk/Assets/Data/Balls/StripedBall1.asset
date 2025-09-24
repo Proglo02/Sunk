@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
     Number: 9
+    BallType: 1
     Material: {fileID: 2100000, guid: 115f1f410cf85f54aa0f049a5c6e8e92, type: 2}

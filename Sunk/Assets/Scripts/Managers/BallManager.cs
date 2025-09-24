@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.GridLayout;
 
 [RequireComponent(typeof(BallInitializer))]
 public class BallManager : Singelton<BallManager>
@@ -11,9 +10,13 @@ public class BallManager : Singelton<BallManager>
 
     private BallInitializer ballInitializer;
 
-    public UnityEvent OnAllBallsStopped = new UnityEvent();
+    [HideInInspector] public UnityEvent OnAllBallsStopped = new UnityEvent();
+    [HideInInspector] public UnityEvent<BallObject> OnAllBallDestroyed = new UnityEvent<BallObject>();
 
     private List<BallObject> ballObjects = new List<BallObject>();
+    public CueBallObject CueBall { get; private set; }
+
+    private Coroutine ballMovementCheckCoroutine;
 
     protected override void Awake()
     {
@@ -42,6 +45,15 @@ public class BallManager : Singelton<BallManager>
         }
     }
 
+    public void AddCueBall(CueBallObject cueBall)
+    {
+        if(!CueBall)
+        {
+            CueBall = cueBall;
+            CueBall.OnBallFired.AddListener(OnBallFired);
+        }
+    }
+
     public void DestroyBall(GameObject ball)
     {
         BallObject ballObject = ball.GetComponent<BallObject>();
@@ -49,20 +61,31 @@ public class BallManager : Singelton<BallManager>
         if (!ballObject)
             return;
 
+        if(ballObject.BallData.BallType == BallType.Cue)
+        {
+            CueBall.Disable();
+            return;
+        }
+
         if (ballObjects.Contains(ballObject))
+        {
             ballObjects.Remove(ballObject);
+            OnAllBallDestroyed.Invoke(ballObject);
+        }
 
         Destroy(ball);
     }
 
     public IEnumerator BallMovementCheck()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.1f);
 
         while (!AllBallsHaveStopped())
         {
             yield return new WaitForEndOfFrame();
         }
+
+        ballMovementCheckCoroutine = null;
         OnAllBallsStopped.Invoke();
     }
 
@@ -75,5 +98,11 @@ public class BallManager : Singelton<BallManager>
         }
 
         return true;
+    }
+
+    private void OnBallFired()
+    {
+        if(ballMovementCheckCoroutine == null)
+            ballMovementCheckCoroutine = StartCoroutine(BallMovementCheck());
     }
 }
