@@ -14,50 +14,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Balls:
   - Ball: {fileID: 11400000, guid: dd1603214f47f8940add82d394a462db, type: 2}
-    Position: {x: 0, y: 0.4, z: 5}
+    Position: {x: 0, y: 0.3, z: 5}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: 041ee2c2ba4b11648a09435c7fb50a6c, type: 2}
-    Position: {x: 0, y: 0.4, z: -4}
+    Position: {x: 0, y: 0.3, z: -4}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: f622ca7104302014e8de1a1b6487e3cc, type: 2}
-    Position: {x: -0.4, y: 0.4, z: -4.7}
+    Position: {x: -0.3, y: 0.3, z: -4.52}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: 43f8163b0b3d4e14ba1299021bfcb24f, type: 2}
-    Position: {x: 0.4, y: 0.4, z: -4.7}
+    Position: {x: 0.3, y: 0.3, z: -4.52}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: d17bb459a7b2b284289ecd6aabd548cb, type: 2}
-    Position: {x: -0.8, y: 0.4, z: -5.4}
+    Position: {x: -0.6, y: 0.3, z: -5.04}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: cce271ce69ded1546a90a263260456d5, type: 2}
-    Position: {x: 0, y: 0.4, z: -5.4}
+    Position: {x: 0, y: 0.3, z: -5.04}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: 549c521075317314490b0b0e180d1326, type: 2}
-    Position: {x: 0.8, y: 0.4, z: -5.4}
+    Position: {x: 0.6, y: 0.3, z: -5.04}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: f622ca7104302014e8de1a1b6487e3cc, type: 2}
-    Position: {x: -1.2, y: 0.4, z: -6.1}
+    Position: {x: -0.9, y: 0.3, z: -5.56}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: f1702003189af854290c46cfce9a0cf3, type: 2}
-    Position: {x: -0.4, y: 0.4, z: -6.1}
+    Position: {x: -0.3, y: 0.3, z: -5.56}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: 3598a88e75d3c7d4794bdd0eb2c4b8b0, type: 2}
-    Position: {x: 0.4, y: 0.4, z: -6.1}
+    Position: {x: 0.3, y: 0.3, z: -5.56}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: e7b0179dc03d97549b9832cbdcb065eb, type: 2}
-    Position: {x: 1.2, y: 0.4, z: -6.1}
+    Position: {x: 0.9, y: 0.3, z: -5.56}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: 36e9aacdb6583fd4f8fb23816577d901, type: 2}
-    Position: {x: -1.6, y: 0.4, z: -6.8}
+    Position: {x: -1.2, y: 0.3, z: -6.08}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: e1aaebffaa69e31488e0af12cdd1491b, type: 2}
-    Position: {x: -0.8, y: 0.4, z: -6.8}
+    Position: {x: -0.6, y: 0.3, z: -6.08}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: bc8094f8cf53363469cc77646b0d4f84, type: 2}
-    Position: {x: 0, y: 0.4, z: -6.8}
+    Position: {x: 0, y: 0.3, z: -6.08}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: f688c0cf044cd874f812e2b305a275a0, type: 2}
-    Position: {x: 0.8, y: 0.4, z: -6.8}
+    Position: {x: 0.6, y: 0.3, z: -6.08}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
   - Ball: {fileID: 11400000, guid: 824f2337abfbdb242b37b4aba2eca16c, type: 2}
-    Position: {x: 1.6, y: 0.4, z: -6.8}
+    Position: {x: 1.2, y: 0.3, z: -6.08}
     Rotation: {x: 0, y: 0, z: 0, w: 0}

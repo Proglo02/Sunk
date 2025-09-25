@@ -5,7 +5,7 @@ using System.Collections;
 
 public class CueBallObject : BallObject
 {
-    [SerializeField] private GameObject aimTarget;
+    [SerializeField] private AimTarget aimTarget;
     [Header("Shoot Force")]
     [SerializeField] private float maxShootForce;
     public float MaxShootForce => maxShootForce;
@@ -31,6 +31,7 @@ public class CueBallObject : BallObject
     private void Start()
     {
         SetAimTargetPosition();
+        aimTarget.SetLine();
         lastSafeLocation = transform.position;
     }
 
@@ -42,16 +43,35 @@ public class CueBallObject : BallObject
     private void OnAllBallsStopped()
     {
         if (isDisabled)
-        {
-            transform.position = lastSafeLocation;
-            gameObject.SetActive(true);
-            isDisabled = false;
-        }
+            TrySetSafeLocation();
         else
             lastSafeLocation = transform.position;
 
-        aimTarget.SetActive(true);
+        aimTarget.gameObject.SetActive(true);
         SetAimTargetPosition();
+        aimTarget.SetLine();
+    }
+
+    private void TrySetSafeLocation()
+    {
+        Collider[] colliders = Physics.OverlapSphere(lastSafeLocation, .3f);
+
+        if (colliders.Length > 0)
+        {
+            foreach (var collider in colliders)
+            {
+                if (collider.CompareTag("Ball"))
+                {
+                    transform.position = lastSafeLocation + new Vector3(0f, 1f, 0f);
+                    break;
+                }
+            }
+        }
+        else
+            transform.position = lastSafeLocation;
+
+        gameObject.SetActive(true);
+        isDisabled = false;
     }
 
     public void FireBall()
@@ -64,7 +84,7 @@ public class CueBallObject : BallObject
 
         OnBallFired.Invoke();
 
-        aimTarget.SetActive(false);
+        aimTarget.gameObject.SetActive(false);
 
         IsCharging = false;
 
@@ -104,10 +124,10 @@ public class CueBallObject : BallObject
 
         if (hit.collider != null)
         {
-            aimTarget.transform.position = transform.position + direction * (hit.distance - .2f) + new Vector3(0f, -.4f, 0f);
+            aimTarget.transform.position = transform.position + direction * (hit.distance - .2f) + new Vector3(0f, -.3f, 0f);
         }
 
-        aimTarget.transform.rotation = Quaternion.Euler(new Vector3(90, 90, 0));
+        aimTarget.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
     private IEnumerator ChargeShootForce()
@@ -147,6 +167,7 @@ public class CueBallObject : BallObject
             aimAngle = angle;
 
         SetAimTargetPosition();
+        aimTarget.SetLine();
     }
 
     public void Disable()

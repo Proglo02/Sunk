@@ -14,13 +14,20 @@ public enum FoulType
 
 public class GameManager : Singelton<GameManager>
 {
-    [SerializeField] private int maxHealth;
+    [SerializeField] private GameOverMenu gameOverMenu;
+
+    [Header("Game Settings")]
+    [SerializeField] public int MaxHealth;
     [HideInInspector] public int CurrentHealth;
 
     [HideInInspector] public UnityEvent OnDamageTaken = new UnityEvent();
 
+    [HideInInspector] public int CurrentRound = 1;
+
     private int currentScore = 0;
     private bool hasScoredThisTurn = false;
+    private bool hasTakenDamageThisTurn = false;
+    private bool isGameOver = false;
 
     protected override void Awake()
     {
@@ -60,16 +67,16 @@ public class GameManager : Singelton<GameManager>
         switch (foulType)
         {
             case FoulType.NoBallsSunk: OnTakeDamage(); break;
-            case FoulType.CueballSunk:
-                break;
-            case FoulType.Ball8SunkEarly: OnGameOver(); break;
+            case FoulType.CueballSunk: OnTakeDamage(); break;
+            case FoulType.Ball8SunkEarly: EndGame(false); break;
         }
     }
 
     private void StartGame()
     {
-        CurrentHealth = maxHealth;
+        CurrentHealth = MaxHealth;
         BallManager.Instance.InitalizeBalls();
+        PlayerManager.Instance.ActivatePlayer();
     }
 
     private void OnBallFired()
@@ -79,14 +86,20 @@ public class GameManager : Singelton<GameManager>
 
     private void OnAllBallsStopped()
     {
-        if (!hasScoredThisTurn)
+        if (CurrentRound > 1 && !hasScoredThisTurn)
         {
             AddFoul(FoulType.NoBallsSunk);
         }
 
-        hasScoredThisTurn = false;
-
-        PlayerManager.Instance.ActivatePlayer();
+        if (BallManager.Instance.GetNumBalls() <= 1)
+            EndGame(true);
+        else if( !isGameOver )
+        {
+            CurrentRound++;
+            hasScoredThisTurn = false;
+            hasTakenDamageThisTurn = false;
+            PlayerManager.Instance.ActivatePlayer();
+        }
     }
 
     private void OnBallDestroyed(BallObject ballObject)
@@ -96,7 +109,10 @@ public class GameManager : Singelton<GameManager>
             case BallType.Cue:
                 AddFoul(FoulType.CueballSunk); break;
             case BallType.Ball8:
-                AddFoul(FoulType.Ball8SunkEarly); break;
+            {
+                if(BallManager.Instance.GetNumBalls() > 2)
+                    AddFoul(FoulType.Ball8SunkEarly);
+            }break;
             default:
             {
                 hasScoredThisTurn = true;
@@ -107,16 +123,26 @@ public class GameManager : Singelton<GameManager>
 
     private void OnTakeDamage()
     {
+        if (hasTakenDamageThisTurn)
+            return;
+
+        hasTakenDamageThisTurn = true;
+
         CurrentHealth--;
         OnDamageTaken.Invoke();
         if (CurrentHealth <= 0)
         {
-            OnGameOver();
+            EndGame(false);
         }
     }
 
-    private void OnGameOver()
+    private void EndGame(bool playerWon)
     {
-        EditorApplication.isPlaying = false;
+        isGameOver = true;
+
+        if(playerWon)
+            SaveSystem.SaveData();
+
+        gameOverMenu.Activate(playerWon);
     }
 }

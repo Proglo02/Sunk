@@ -8,6 +8,11 @@ public class Player : MonoBehaviour
     private BallType ballType;
     private bool isActive = false;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void AssignBallType(BallType ballType)
     {
         if (ballType != BallType.Solid && ballType != BallType.Striped)
@@ -21,7 +26,8 @@ public class Player : MonoBehaviour
         if (!context.started || !isActive)
             return;
 
-        BallManager.Instance.CueBall.FireBall();
+        if(BallManager.Instance)
+            BallManager.Instance.CueBall.FireBall();
     }
 
     public void OnRotateStep(InputAction.CallbackContext context)

@@ -1,17 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInputManager))]
 public class PlayerManager : Singelton<PlayerManager>
 {
-    public bool PlayerIsActive { get; private set; } = true;
+    private bool playerIsActive = false;
 
     private int activePlayerIndex = 0;
     private Player activePlayer;
     private Player firstPlayer;
     private Player secondPlayer;
+
+    protected override void Awake()
+    {
+        if (!PlayerInputManager.instance.playerPrefab)
+            PlayerInputManager.instance.playerPrefab = GetPlayerPrefab();
+
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void OnPlayerJoined(PlayerInput playerInput)
     {
@@ -29,27 +40,36 @@ public class PlayerManager : Singelton<PlayerManager>
         }
     }
 
+    private GameObject GetPlayerPrefab()
+    {
+        GameObject prefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Player/Player.prefab", typeof(GameObject));
+        return prefab;
+    }
+
     private void SetActivePlayer(int index)
     {
         activePlayer = activePlayerIndex == 0 ? firstPlayer : secondPlayer;
-        activePlayer.SetActive(PlayerIsActive);
+        activePlayer.SetActive(playerIsActive);
     }
 
     public void DeactivatePlayer()
     {
-        PlayerIsActive = false;
+        playerIsActive = false;
 
         activePlayer.SetActive(false);
     }
 
     public void ActivatePlayer()
     {
-        activePlayer.SetActive(true);
+        playerIsActive = true;
+
+        if(activePlayer)
+            activePlayer.SetActive(true);
     }
 
     public void SwitchActivePlayer()
     {
-        PlayerIsActive = true;
+        playerIsActive = true;
         activePlayerIndex = activePlayerIndex == 0 ? 1 : 0;
 
         activePlayer = activePlayerIndex == 0 ? firstPlayer : secondPlayer;

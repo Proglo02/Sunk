@@ -39,7 +39,7 @@ public class BallObject : MonoBehaviour
 
         if (hit.collider != null && hit.collider.CompareTag("Table"))
         {
-            transform.position = new Vector3(transform.position.x, hit.point.y + 0.4f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, hit.point.y + 0.3f, transform.position.z);
             return true;
         }
 

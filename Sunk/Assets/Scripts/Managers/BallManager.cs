@@ -54,6 +54,11 @@ public class BallManager : Singelton<BallManager>
         }
     }
 
+    public int GetNumBalls()
+    {
+        return ballObjects.Count;
+    }
+
     public void DestroyBall(GameObject ball)
     {
         BallObject ballObject = ball.GetComponent<BallObject>();
@@ -64,6 +69,7 @@ public class BallManager : Singelton<BallManager>
         if(ballObject.BallData.BallType == BallType.Cue)
         {
             CueBall.Disable();
+            OnAllBallDestroyed.Invoke(ballObject);
             return;
         }
 
