@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BallInitializer : MonoBehaviour
 {
+    [Header("Ball Prefabs")]
     [SerializeField] private GameObject ballObject;
     [SerializeField] private GameObject cueBallObject;
 

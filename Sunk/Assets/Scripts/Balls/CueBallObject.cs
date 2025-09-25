@@ -42,6 +42,9 @@ public class CueBallObject : BallObject
 
     private void OnAllBallsStopped()
     {
+        if(GameManager.Instance.isGameOver)
+            return;
+
         if (isDisabled)
             TrySetSafeLocation();
         else

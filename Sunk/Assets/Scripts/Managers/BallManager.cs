@@ -8,6 +8,8 @@ public class BallManager : Singelton<BallManager>
 {
     [SerializeField] private BallLayout ballLayout;
 
+    [SerializeField] private GameObject confettiPrefab;
+
     private BallInitializer ballInitializer;
 
     [HideInInspector] public UnityEvent OnAllBallsStopped = new UnityEvent();
@@ -66,7 +68,10 @@ public class BallManager : Singelton<BallManager>
         if (!ballObject)
             return;
 
-        if(ballObject.BallData.BallType == BallType.Cue)
+        if (confettiPrefab)
+            Instantiate(confettiPrefab, ball.transform.position, Quaternion.Euler(-90f, 0f, 0f));
+
+        if (ballObject.BallData.BallType == BallType.Cue)
         {
             CueBall.Disable();
             OnAllBallDestroyed.Invoke(ballObject);

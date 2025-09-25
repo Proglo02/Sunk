@@ -46,7 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballLayout: {fileID: 11400000, guid: 8c56e83ccf6f1914e8b5c785228dff64, type: 2}
+  confettiPrefab: {fileID: 8580131818508523751, guid: c1ce0bf9b5e736249a4b6e1ce06ed5f1,
+    type: 3}
   OnAllBallsStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAllBallDestroyed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4997587716693742823

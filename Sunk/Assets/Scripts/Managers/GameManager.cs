@@ -27,7 +27,7 @@ public class GameManager : Singelton<GameManager>
     private int currentScore = 0;
     private bool hasScoredThisTurn = false;
     private bool hasTakenDamageThisTurn = false;
-    private bool isGameOver = false;
+    public bool isGameOver { get; private set; } = false;
 
     protected override void Awake()
     {
