@@ -46,6 +46,17 @@ public class Player : MonoBehaviour
         BallManager.Instance.CueBall.SetAimCardinal(context);
     }
 
+    public void OnRotateScroll(InputAction.CallbackContext context)
+    {
+        if (!context.started || !isActive)
+            return;
+
+        if (Mouse.current.rightButton.isPressed)
+            OnRotateCardinal(context);
+        else
+            OnRotateStep(context);
+    }
+
     public void SetActive(bool active)
     {
         isActive = active;

@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInputManager))]
-public class PlayerManager : Singelton<PlayerManager>
+public class PlayerManager : Singleton<PlayerManager>
 {
+    private PlayerInputManager playerInputManager;
+
     private bool playerIsActive = false;
 
     private int activePlayerIndex = 0;
@@ -17,7 +16,9 @@ public class PlayerManager : Singelton<PlayerManager>
 
     protected override void Awake()
     {
-        if (!PlayerInputManager.instance.playerPrefab)
+        playerInputManager = GetComponent<PlayerInputManager>();
+
+        if (!playerInputManager.playerPrefab && !PlayerInputManager.instance.playerPrefab)
             PlayerInputManager.instance.playerPrefab = GetPlayerPrefab();
 
         base.Awake();
@@ -42,7 +43,8 @@ public class PlayerManager : Singelton<PlayerManager>
 
     private GameObject GetPlayerPrefab()
     {
-        GameObject prefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Player/Player.prefab", typeof(GameObject));
+        
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player/Player");
         return prefab;
     }
 

@@ -57,7 +57,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NumberTexture:
-        m_Texture: {fileID: 2800000, guid: 4c8229123e3db7840b15bc60877f0dac, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3a6809a61e7d46442be1c2eaf3d3ba14, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -68,12 +68,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_84852b10a6d842e785b69ced7664d8a7_Texture_1_Texture2D:
+        m_Texture: {fileID: 18700000, guid: 6feb47d323d8b564ea3b8760e50bfdf8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _StripeTexture:
         m_Texture: {fileID: 2800000, guid: 1cf57f79f94223249b03371e3459e0b0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D_Array:
+        m_Texture: {fileID: 18700000, guid: 6feb47d323d8b564ea3b8760e50bfdf8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -109,6 +117,7 @@ Material:
     - _GlossyReflections: 0
     - _IsStriped: 0
     - _Metallic: 0
+    - _Number: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0

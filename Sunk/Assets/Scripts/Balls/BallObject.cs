@@ -26,6 +26,7 @@ public class BallObject : MonoBehaviour
     public void SetMaterial(Material material)
     {
         GetComponent<MeshRenderer>().material = material;
+        //material.SetFloat("_Number", BallData.Number);
     }
 
     private void GetComponents()

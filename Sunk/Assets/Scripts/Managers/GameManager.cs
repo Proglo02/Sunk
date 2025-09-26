@@ -12,7 +12,7 @@ public enum FoulType
     Ball8SunkEarly,
 }
 
-public class GameManager : Singelton<GameManager>
+public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private GameOverMenu gameOverMenu;
 
@@ -21,12 +21,14 @@ public class GameManager : Singelton<GameManager>
     [HideInInspector] public int CurrentHealth;
 
     [HideInInspector] public UnityEvent OnDamageTaken = new UnityEvent();
+    [HideInInspector] public UnityEvent OnHealthAdded = new UnityEvent();
 
     [HideInInspector] public int CurrentRound = 1;
 
     private int currentScore = 0;
     private bool hasScoredThisTurn = false;
     private bool hasTakenDamageThisTurn = false;
+    private bool shouldAddHealth = false;
     public bool isGameOver { get; private set; } = false;
 
     protected override void Awake()
@@ -93,13 +95,24 @@ public class GameManager : Singelton<GameManager>
 
         if (BallManager.Instance.GetNumBalls() <= 1)
             EndGame(true);
-        else if( !isGameOver )
+        else if (!isGameOver)
+            OnRoundOver();
+    }
+
+    private void OnRoundOver()
+    {
+        CurrentRound++;
+
+        if (!hasTakenDamageThisTurn && shouldAddHealth)
         {
-            CurrentRound++;
-            hasScoredThisTurn = false;
-            hasTakenDamageThisTurn = false;
-            PlayerManager.Instance.ActivatePlayer();
+            CurrentHealth++;
+            OnHealthAdded.Invoke();
+            shouldAddHealth = false;
         }
+
+        hasScoredThisTurn = false;
+        hasTakenDamageThisTurn = false;
+        PlayerManager.Instance.ActivatePlayer();
     }
 
     private void OnBallDestroyed(BallObject ballObject)
@@ -115,6 +128,9 @@ public class GameManager : Singelton<GameManager>
             }break;
             default:
             {
+                if (hasScoredThisTurn)
+                    shouldAddHealth = true;
+
                 hasScoredThisTurn = true;
                 currentScore++;
             }break;

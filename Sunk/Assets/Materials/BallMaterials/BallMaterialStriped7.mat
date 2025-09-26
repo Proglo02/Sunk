@@ -38,7 +38,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _Number: 15
     m_Colors:
     - _BallColor: {r: 0.5294118, g: 0.07450981, b: 0, a: 1}
   m_BuildTextureStacks: []

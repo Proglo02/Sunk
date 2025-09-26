@@ -24,6 +24,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "RotateScroll",
+                    "type": "Button",
+                    "id": "7bff51dd-8270-412f-b987-c8a986b419c1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Fire",
                     "type": "Button",
                     "id": "52988bfb-e579-4d17-a9ff-d89054cb4354",
@@ -35,7 +44,7 @@
             ],
             "bindings": [
                 {
-                    "name": "1D Axis",
+                    "name": "Keyboard",
                     "id": "569ac922-ce3f-461b-aaea-3d851c6cc970",
                     "path": "1DAxis",
                     "interactions": "",
@@ -51,7 +60,7 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "RotateCardinal",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -62,13 +71,13 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "RotateCardinal",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "1D Axis",
+                    "name": "Gamepad",
                     "id": "682fc6e9-ea34-4687-a8a3-09ac86076447",
                     "path": "1DAxis",
                     "interactions": "",
@@ -84,7 +93,7 @@
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "RotateCardinal",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -95,40 +104,7 @@
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "RotateCardinal",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "One Modifier",
-                    "id": "f6fa77b1-193d-4990-9d10-20627cbb2bd7",
-                    "path": "OneModifier",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateCardinal",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "4bb97ddf-75e7-49bc-a0ce-b24743494829",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateCardinal",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "abb3d51a-53f8-43d2-8036-57599d903c80",
-                    "path": "<Mouse>/scroll/y",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "RotateCardinal",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -139,7 +115,7 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -150,7 +126,18 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc3450f9-fc25-4e1b-83e8-9bfb447ea6f6",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -172,7 +159,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "RotateStep",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -183,7 +170,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "RotateStep",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -205,7 +192,7 @@
                     "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "RotateStep",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -216,7 +203,7 @@
                     "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "RotateStep",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -227,21 +214,54 @@
                     "path": "<Gamepad>/leftStick/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse;Gamepad",
                     "action": "RotateStep",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "16e28162-035b-4591-8256-ae644fef6827",
+                    "id": "bd6d4108-868e-4fff-88fb-2afffca5397a",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "RotateStep",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RotateScroll",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Mouse",
+                    "id": "059f72e7-8be1-497a-b47d-34936b71204b",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateScroll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "b9ed5e54-2b39-4491-8bef-dc65f06fccc4",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RotateScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "9c7bbce0-ec22-4d87-8369-e3a024aadfa6",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RotateScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(BallInitializer))]
-public class BallManager : Singelton<BallManager>
+public class BallManager : Singleton<BallManager>
 {
     [SerializeField] private BallLayout ballLayout;
 

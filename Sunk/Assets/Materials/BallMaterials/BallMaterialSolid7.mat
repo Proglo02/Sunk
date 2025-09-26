@@ -27,6 +27,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _IsStriped: 0
+    - _Number: 7
     m_Colors:
     - _BallColor: {r: 0.5283019, g: 0.07645862, b: 0, a: 1}
   m_BuildTextureStacks: []

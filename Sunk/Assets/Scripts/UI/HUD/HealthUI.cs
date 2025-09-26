@@ -11,6 +11,7 @@ public class HealthUI : MonoBehaviour
     {
         InstantiateLiveIcons();
         GameManager.Instance.OnDamageTaken.AddListener(OnDamageTaken);
+        GameManager.Instance.OnHealthAdded.AddListener(OnHealthAdded);
 
     }
     private void InstantiateLiveIcons()
@@ -24,5 +25,10 @@ public class HealthUI : MonoBehaviour
     private void OnDamageTaken()
     {
         Destroy(lives.transform.GetChild(0).gameObject);
+    }
+
+    private void OnHealthAdded()
+    {
+        Instantiate(liveIconPrefab, lives.transform);
     }
 }
