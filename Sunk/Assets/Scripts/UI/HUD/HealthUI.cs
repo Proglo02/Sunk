@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthUI : MonoBehaviour
@@ -10,13 +8,13 @@ public class HealthUI : MonoBehaviour
     private void Awake()
     {
         InstantiateLiveIcons();
-        GameManager.Instance.OnDamageTaken.AddListener(OnDamageTaken);
-        GameManager.Instance.OnHealthAdded.AddListener(OnHealthAdded);
+        StandardBilliardsManager.Instance.OnDamageTaken.AddListener(OnDamageTaken);
+        StandardBilliardsManager.Instance.OnHealthAdded.AddListener(OnHealthAdded);
 
     }
     private void InstantiateLiveIcons()
     {
-        for (int i = 0; i < GameManager.Instance.MaxHealth; i++)
+        for (int i = 0; i < StandardBilliardsManager.Instance.MaxHealth; i++)
         {
             Instantiate(liveIconPrefab, lives.transform);
         }

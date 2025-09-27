@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody))]
@@ -23,10 +21,13 @@ public class BallObject : MonoBehaviour
             DoMotionCheck();
     }
 
+    /// <summary>
+    /// Sets the material of the ball
+    /// </summary>
     public void SetMaterial(Material material)
     {
         GetComponent<MeshRenderer>().material = material;
-        //material.SetFloat("_Number", BallData.Number);
+        material.SetFloat("_Number", BallData.Number);
     }
 
     private void GetComponents()
@@ -38,6 +39,7 @@ public class BallObject : MonoBehaviour
     {
         Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.6f);
 
+        //If it hits the ground, set the position to be on the ground
         if (hit.collider != null && hit.collider.CompareTag("Table"))
         {
             transform.position = new Vector3(transform.position.x, hit.point.y + 0.3f, transform.position.z);
@@ -49,7 +51,7 @@ public class BallObject : MonoBehaviour
 
     private void DoMotionCheck()
     {
-        // Check if it's still moving but below the threshold
+        // If it's still moving but below the threshold stop all motion
         if (IsMoving && rigidBody.angularVelocity.magnitude < freezeVelocity && rigidBody.velocity.magnitude < freezeVelocity)
         {
             rigidBody.velocity = Vector3.zero;
@@ -57,6 +59,7 @@ public class BallObject : MonoBehaviour
             rigidBody.Sleep();
             IsMoving = false;
         }
+        // Check if it is moving or has stopped
         else
             IsMoving = rigidBody.angularVelocity.magnitude > .13f || rigidBody.velocity.magnitude > .2f;
     }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
@@ -18,18 +16,12 @@ public class SaveSystem
         return saveFileName;
     }
 
+    /// <summary>
+    /// Saves the current game data to the save file
+    /// </summary>
     public static void SaveData()
     {
         HandleSaveData();
-    }
-
-    private static void HandleSaveData()
-    {
-        int score = GameManager.Instance.CurrentRound;
-        if (savedData.HighScore > 0 && savedData.HighScore > score)
-            savedData.HighScore = score;
-
-        File.WriteAllText(GetSaveFileName(), JsonUtility.ToJson(savedData, true));
     }
 
     public static SavedData LoadData()
@@ -37,8 +29,20 @@ public class SaveSystem
         return HandleLoadData();
     }
 
+    private static void HandleSaveData()
+    {
+        savedData = LoadData();
+
+        int score = GameManager.Instance.CurrentRound;
+        if (savedData.HighScore <= 0 || savedData.HighScore > score)
+            savedData.HighScore = score;
+
+        File.WriteAllText(GetSaveFileName(), JsonUtility.ToJson(savedData, true));
+    }
+
     private static SavedData HandleLoadData()
     {
+        // If the save file doesn't exist, create it and return default saved data
         if (!File.Exists(GetSaveFileName()))
         {
             File.Create(GetSaveFileName());

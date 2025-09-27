@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2522743285178212554}
-  - component: {fileID: 1156274206545319522}
+  - component: {fileID: 7909375813686318441}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: StandardBilliardsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1156274206545319522
+--- !u!114 &7909375813686318441
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,6 +41,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6107744215802520210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff816b684e37dc34f959e05e970d93d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2978ba5db24eb6f4c9132676a45e5f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameOverMenu: {fileID: 0}
+  CurrentRound: 1
+  MaxHealth: 3
+  OnDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthAdded:
+    m_PersistentCalls:
+      m_Calls: []
+  CurrentHealth: 0

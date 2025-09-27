@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +10,6 @@ public class ChargeMeter : MonoBehaviour
     private void Awake()
     {
         StartCoroutine(BindCueBallEvents());
-    }
-
-    private IEnumerator BindCueBallEvents()
-    {
-        while (!BallManager.Instance.CueBall)
-            yield return new WaitForEndOfFrame();
-
-        BallManager.Instance.CueBall.OnBallFired.AddListener(OnBallFired);
-        BallManager.Instance.CueBall.OnBallCharging.AddListener(OnBallCharging);
     }
 
     private void Update()
@@ -47,5 +37,14 @@ public class ChargeMeter : MonoBehaviour
     private void OnBallCharging()
     {
         meter.SetActive(true);
+    }
+
+    private IEnumerator BindCueBallEvents()
+    {
+        while (!BallManager.Instance.CueBall)
+            yield return new WaitForEndOfFrame();
+
+        BallManager.Instance.CueBall.OnBallFired.AddListener(OnBallFired);
+        BallManager.Instance.CueBall.OnBallCharging.AddListener(OnBallCharging);
     }
 }

@@ -2427,21 +2427,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1156274206545319522, guid: 2c86a22905dcf8743bb49078e645aff7,
-        type: 3}
-      propertyPath: MaxHealth
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1156274206545319522, guid: 2c86a22905dcf8743bb49078e645aff7,
-        type: 3}
-      propertyPath: maxHealth
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1156274206545319522, guid: 2c86a22905dcf8743bb49078e645aff7,
-        type: 3}
-      propertyPath: gameOverMenu
-      value: 
-      objectReference: {fileID: 221493719}
     - target: {fileID: 2522743285178212554, guid: 2c86a22905dcf8743bb49078e645aff7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2495,10 +2480,14 @@ PrefabInstance:
     - target: {fileID: 6107744215802520210, guid: 2c86a22905dcf8743bb49078e645aff7,
         type: 3}
       propertyPath: m_Name
-      value: GameManager
+      value: StandardBilliardsManager
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8578376954430877880, guid: 2c86a22905dcf8743bb49078e645aff7, type: 3}
+    - target: {fileID: 7909375813686318441, guid: 2c86a22905dcf8743bb49078e645aff7,
+        type: 3}
+      propertyPath: gameOverMenu
+      value: 
+      objectReference: {fileID: 221493719}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,12 +6,12 @@ public class PlayerManager : Singleton<PlayerManager>
 {
     private PlayerInputManager playerInputManager;
 
-    private bool playerIsActive = false;
-
     private int activePlayerIndex = 0;
     private Player activePlayer;
     private Player firstPlayer;
     private Player secondPlayer;
+
+    private bool playerIsActive = false;
 
     protected override void Awake()
     {
@@ -41,19 +40,9 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
-    private GameObject GetPlayerPrefab()
-    {
-        
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player/Player");
-        return prefab;
-    }
-
-    private void SetActivePlayer(int index)
-    {
-        activePlayer = activePlayerIndex == 0 ? firstPlayer : secondPlayer;
-        activePlayer.SetActive(playerIsActive);
-    }
-
+    /// <summary>
+    /// Deactivates the currently active player
+    /// </summary>
     public void DeactivatePlayer()
     {
         playerIsActive = false;
@@ -61,14 +50,20 @@ public class PlayerManager : Singleton<PlayerManager>
         activePlayer.SetActive(false);
     }
 
+    /// <summary>
+    /// Activates the currently active player
+    /// </summary>
     public void ActivatePlayer()
     {
         playerIsActive = true;
 
-        if(activePlayer)
+        if (activePlayer)
             activePlayer.SetActive(true);
     }
 
+    /// <summary>
+    /// Switches the active player to the other player and activates them
+    /// </summary>
     public void SwitchActivePlayer()
     {
         playerIsActive = true;
@@ -78,5 +73,17 @@ public class PlayerManager : Singleton<PlayerManager>
 
         if (activePlayer)
             activePlayer.SetActive(true);
+    }
+
+    private GameObject GetPlayerPrefab()
+    { 
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/Player/Player");
+        return prefab;
+    }
+
+    private void SetActivePlayer(int index)
+    {
+        activePlayer = activePlayerIndex == 0 ? firstPlayer : secondPlayer;
+        activePlayer.SetActive(playerIsActive);
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AimTarget : MonoBehaviour
@@ -13,6 +11,9 @@ public class AimTarget : MonoBehaviour
         lineMaterial = GetComponent<Renderer>().material;
     }
 
+    /// <summary>
+    /// Sets the line positions and tiling based on the distance between the cue ball and the aim target
+    /// </summary>
     public void SetLine()
     {
         lineRenderer.positionCount = 2;

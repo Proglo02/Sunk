@@ -7,17 +7,14 @@ using UnityEngine.Events;
 public class BallManager : Singleton<BallManager>
 {
     [SerializeField] private BallLayout ballLayout;
-
     [SerializeField] private GameObject confettiPrefab;
-
-    private BallInitializer ballInitializer;
 
     [HideInInspector] public UnityEvent OnAllBallsStopped = new UnityEvent();
     [HideInInspector] public UnityEvent<BallObject> OnAllBallDestroyed = new UnityEvent<BallObject>();
-
-    private List<BallObject> ballObjects = new List<BallObject>();
     public CueBallObject CueBall { get; private set; }
 
+    private BallInitializer ballInitializer;
+    private List<BallObject> ballObjects = new List<BallObject>();
     private Coroutine ballMovementCheckCoroutine;
 
     protected override void Awake()
@@ -26,11 +23,9 @@ public class BallManager : Singleton<BallManager>
         GetComponents();
     }
 
-    private void GetComponents()
-    {
-        ballInitializer = GetComponent<BallInitializer>();
-    }
-
+    /// <summary>
+    /// Initializes all balls from the set layout
+    /// </summary>
     public void InitalizeBalls()
     {
         foreach (var layoutData in ballLayout.Balls)
@@ -39,6 +34,9 @@ public class BallManager : Singleton<BallManager>
         }
     }
 
+    /// <summary>
+    /// Adds a ball to the list of managed balls
+    /// </summary>
     public void AddBall(BallObject ball)
     {
         if (!ballObjects.Contains(ball))
@@ -47,6 +45,9 @@ public class BallManager : Singleton<BallManager>
         }
     }
 
+    /// <summary>
+    /// Set the cue ball reference
+    /// </summary>
     public void AddCueBall(CueBallObject cueBall)
     {
         if(!CueBall)
@@ -59,6 +60,33 @@ public class BallManager : Singleton<BallManager>
     public int GetNumBalls()
     {
         return ballObjects.Count;
+    }
+
+    public float GetFastestBallSpeed()
+    {
+        float fastestSpeed = 0f;
+        foreach (var ball in ballObjects)
+        {
+            float velocity = ball.GetComponent<Rigidbody>().velocity.magnitude;
+            float angularVelocity = ball.GetComponent<Rigidbody>().angularVelocity.magnitude;
+
+            if (ball.IsMoving && (velocity > fastestSpeed || angularVelocity > fastestSpeed))
+            {
+                fastestSpeed = Mathf.Max(velocity, angularVelocity);
+            }
+        }
+        return fastestSpeed;
+    }
+
+    public bool IsAnyBallMoving()
+    {
+        foreach (var ball in ballObjects)
+        {
+            if (ball.IsMoving)
+                return true;
+        }
+
+        return false;
     }
 
     public void DestroyBall(GameObject ball)
@@ -87,33 +115,27 @@ public class BallManager : Singleton<BallManager>
         Destroy(ball);
     }
 
-    public IEnumerator BallMovementCheck()
+    private void GetComponents()
     {
-        yield return new WaitForSeconds(.1f);
-
-        while (!AllBallsHaveStopped())
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        ballMovementCheckCoroutine = null;
-        OnAllBallsStopped.Invoke();
-    }
-
-    private bool AllBallsHaveStopped()
-    {
-        foreach(var ball in ballObjects)
-        {
-            if (ball.IsMoving)
-                return false;
-        }
-
-        return true;
+        ballInitializer = GetComponent<BallInitializer>();
     }
 
     private void OnBallFired()
     {
         if(ballMovementCheckCoroutine == null)
             ballMovementCheckCoroutine = StartCoroutine(BallMovementCheck());
+    }
+
+    private IEnumerator BallMovementCheck()
+    {
+        yield return new WaitForSeconds(.1f);
+
+        while (IsAnyBallMoving())
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        ballMovementCheckCoroutine = null;
+        OnAllBallsStopped.Invoke();
     }
 }

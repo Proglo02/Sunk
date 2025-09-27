@@ -15,10 +15,11 @@ public class CueBallObject : BallObject
     [HideInInspector] public UnityEvent OnBallFired = new UnityEvent();
     [HideInInspector] public UnityEvent OnBallCharging = new UnityEvent();
 
-    private int aimAngle = 180;
-    public bool IsCharging { get; private set; } = false;
     public float ShootForce { get; private set; } = 0f;
+    public bool IsCharging { get; private set; } = false;
 
+
+    private int aimAngle = 180;
     private bool isDisabled = false;
     private Vector3 lastSafeLocation;
 
@@ -35,6 +36,69 @@ public class CueBallObject : BallObject
         lastSafeLocation = transform.position;
     }
 
+    /// <summary>
+    /// Fires the ball in the aimed direction with the charged force <br/>
+    /// If not charging, starts charging the ball
+    /// </summary>
+    public void FireBall()
+    {
+        //If not charging, start charging the ball
+        if (!IsCharging)
+        {
+            StartCoroutine(ChargeShootForce());
+            return;
+        }
+
+        OnBallFired.Invoke();
+
+        aimTarget.gameObject.SetActive(false);
+        IsCharging = false;
+
+        Vector3 force = Quaternion.Euler(0f, aimAngle, 0f) * Vector3.forward * ShootForce;
+        force.y = 0;
+        AddForce(force);
+    }
+
+    /// <summary>
+    /// Rotates the aim angle by 1 degree
+    /// </summary>
+    public void SetAimDegree(InputAction.CallbackContext context)
+    {
+        if (IsCharging)
+            return;
+
+        int value = context.ReadValue<float>() > 0 ? 1 : -1;
+        SetAimAngle(aimAngle + value);
+    }
+
+    /// <summary>
+    /// Rotates the aim angle to the closest cardinal direction (0, 45, 90, etc)
+    /// </summary>
+    public void SetAimCardinal(InputAction.CallbackContext context)
+    {
+        if (IsCharging)
+            return;
+
+        int value = context.ReadValue<float>() > 0 ? 1 : -1;
+        int angle = aimAngle;
+        angle /= 45;
+        angle = aimAngle % 45 != 0 ? angle + (int)((value + 1) * .5f) : angle + value;
+        angle *= 45;
+
+        SetAimAngle(angle);
+    }
+
+    public void Disable()
+    {
+        rigidBody.velocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+        rigidBody.Sleep();
+        gameObject.SetActive(false);
+        IsMoving = false;
+
+        isDisabled = true;
+    }
+
     private void BindEvents()
     {
         BallManager.Instance.OnAllBallsStopped.AddListener(OnAllBallsStopped);
@@ -45,6 +109,7 @@ public class CueBallObject : BallObject
         if(GameManager.Instance.isGameOver)
             return;
 
+        //If the ball was pocketed, try to reset it to the last safe location
         if (isDisabled)
             TrySetSafeLocation();
         else
@@ -69,54 +134,14 @@ public class CueBallObject : BallObject
                     break;
                 }
             }
+
+            transform.position = lastSafeLocation;
         }
         else
             transform.position = lastSafeLocation;
 
         gameObject.SetActive(true);
         isDisabled = false;
-    }
-
-    public void FireBall()
-    {
-        if(!IsCharging)
-        {
-            StartCoroutine(ChargeShootForce());
-            return;
-        }
-
-        OnBallFired.Invoke();
-
-        aimTarget.gameObject.SetActive(false);
-
-        IsCharging = false;
-
-        Vector3 force = Quaternion.Euler(0f, aimAngle, 0f) * Vector3.forward * ShootForce;
-        force.y = 0;
-        AddForce(force);
-    }
-
-    public void SetAimDegree(InputAction.CallbackContext context)
-    {
-        if (IsCharging)
-            return;
-
-        int value  = context.ReadValue<float>() > 0 ? 1 : -1;
-        SetAimAngle(aimAngle + value);
-    }
-
-    public void SetAimCardinal(InputAction.CallbackContext context)
-    {
-        if (IsCharging)
-            return;
-
-        int value = context.ReadValue<float>() > 0 ? 1 : -1;
-        int angle = aimAngle;
-        angle /= 45;
-        angle = aimAngle % 45 != 0 ? angle + (int)((value + 1) * .5f) : angle + value;
-        angle *= 45;
-
-        SetAimAngle(angle);
     }
 
     private void SetAimTargetPosition()
@@ -171,16 +196,5 @@ public class CueBallObject : BallObject
 
         SetAimTargetPosition();
         aimTarget.SetLine();
-    }
-
-    public void Disable()
-    {
-        rigidBody.velocity = Vector3.zero;
-        rigidBody.angularVelocity = Vector3.zero;
-        rigidBody.Sleep();
-        gameObject.SetActive(false);
-        IsMoving = false;
-
-        isDisabled = true;
     }
 }
