@@ -10,7 +10,8 @@ public class BallManager : Singleton<BallManager>
     [SerializeField] private GameObject confettiPrefab;
 
     [HideInInspector] public UnityEvent OnAllBallsStopped = new UnityEvent();
-    [HideInInspector] public UnityEvent<BallObject> OnAllBallDestroyed = new UnityEvent<BallObject>();
+    [HideInInspector] public UnityEvent<BallObject> OnBallDestroyed = new UnityEvent<BallObject>();
+    [HideInInspector] public UnityEvent<BallObject, Pocket> OnBallSunk = new UnityEvent<BallObject, Pocket>();
     public CueBallObject CueBall { get; private set; }
 
     private BallInitializer ballInitializer;
@@ -96,23 +97,35 @@ public class BallManager : Singleton<BallManager>
         if (!ballObject)
             return;
 
-        if (confettiPrefab)
-            Instantiate(confettiPrefab, ball.transform.position, Quaternion.Euler(-90f, 0f, 0f));
-
         if (ballObject.BallData.BallType == BallType.Cue)
         {
             CueBall.Disable();
-            OnAllBallDestroyed.Invoke(ballObject);
+            OnBallDestroyed.Invoke(ballObject);
             return;
         }
 
         if (ballObjects.Contains(ballObject))
         {
             ballObjects.Remove(ballObject);
-            OnAllBallDestroyed.Invoke(ballObject);
+            OnBallDestroyed.Invoke(ballObject);
         }
 
         Destroy(ball);
+    }
+
+    public void SinkBall(GameObject ball, Pocket pocket)
+    {
+        BallObject ballObject = ball.GetComponent<BallObject>();
+
+        if (!ballObject)
+            return;
+
+        if (confettiPrefab)
+            Instantiate(confettiPrefab, ball.transform.position, Quaternion.Euler(-90f, 0f, 0f));
+
+        OnBallSunk.Invoke(ballObject, pocket);
+
+        DestroyBall(ball);
     }
 
     private void GetComponents()

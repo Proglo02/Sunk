@@ -13,6 +13,8 @@ public class StandardBilliardsManager : GameManager<StandardBilliardsManager>
 
     [HideInInspector] public int CurrentHealth;
 
+    private Pocket lastSunkPocket = null;
+
     private bool hasScoredThisTurn = false;
     private bool hasTakenDamageThisTurn = false;
     private bool shouldAddHealth = false;
@@ -49,6 +51,8 @@ public class StandardBilliardsManager : GameManager<StandardBilliardsManager>
 
     protected override void OnRoundOver()
     {
+        base.OnRoundOver();
+
         CurrentRound++;
 
         if (!hasTakenDamageThisTurn && shouldAddHealth)
@@ -63,7 +67,7 @@ public class StandardBilliardsManager : GameManager<StandardBilliardsManager>
         PlayerManager.Instance.ActivatePlayer();
     }
 
-    protected override void OnBallDestroyed(BallObject ballObject)
+    protected override void OnBallSunk(BallObject ballObject, Pocket pocket)
     {
         switch (ballObject.BallData.BallType)
         {
@@ -71,7 +75,7 @@ public class StandardBilliardsManager : GameManager<StandardBilliardsManager>
                 AddFoul(FoulType.CueballSunk); break;
             case BallType.Ball8:
                 {
-                    if (BallManager.Instance.GetNumBalls() > 2)
+                    if (BallManager.Instance.GetNumBalls() > 2 || pocket != lastSunkPocket)
                         AddFoul(FoulType.Ball8SunkEarly);
                 }
                 break;
@@ -80,6 +84,7 @@ public class StandardBilliardsManager : GameManager<StandardBilliardsManager>
                     if (hasScoredThisTurn)
                         shouldAddHealth = true;
 
+                    lastSunkPocket = pocket;
                     hasScoredThisTurn = true;
                 }
                 break;

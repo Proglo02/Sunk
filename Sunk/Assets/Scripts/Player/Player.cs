@@ -80,9 +80,9 @@ public class Player : MonoBehaviour
         float speed = BallManager.Instance.GetFastestBallSpeed();
 
         if (context.started && speed < 10f && BallManager.Instance.IsAnyBallMoving())
-            Time.timeScale = 3f;
+            GameManager.Instance.StartFastForward();
         else if (context.canceled)
-            Time.timeScale = 1f;
+            GameManager.Instance.StopFastForward();
     }
 
     public void SetActive(bool active)

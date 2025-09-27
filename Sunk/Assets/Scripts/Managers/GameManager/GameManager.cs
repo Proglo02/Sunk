@@ -45,6 +45,16 @@ public abstract class GameManager : Singleton<GameManager>
 
     }
 
+    public void StartFastForward()
+    {
+        Time.timeScale = 3;
+    }
+
+    public void StopFastForward()
+    {
+        Time.timeScale = 1f;
+    }
+
     protected virtual void StartGame()
     {
         BallManager.Instance.InitalizeBalls();
@@ -53,6 +63,9 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected void EndGame(bool playerWon)
     {
+        if(isGameOver)
+            return;
+
         isGameOver = true;
 
         if (playerWon)
@@ -61,9 +74,12 @@ public abstract class GameManager : Singleton<GameManager>
         gameOverMenu.Activate(playerWon);
     }
 
-    protected virtual void OnAllBallsStopped(){}
-    protected virtual void OnRoundOver(){}
-    protected virtual void OnBallDestroyed(BallObject ballObject){}
+    protected virtual void OnAllBallsStopped() { }
+    protected virtual void OnBallSunk(BallObject ballObject, Pocket pocket) { }
+    protected virtual void OnRoundOver()
+    {
+        StopFastForward();
+    }
 
     private void GetComponents()
     {
@@ -73,7 +89,7 @@ public abstract class GameManager : Singleton<GameManager>
     private void BindEvents()
     {
         BallManager.Instance.OnAllBallsStopped.AddListener(OnAllBallsStopped);
-        BallManager.Instance.OnAllBallDestroyed.AddListener(OnBallDestroyed);
+        BallManager.Instance.OnBallSunk.AddListener(OnBallSunk);
     }
 
     private void OnBallFired()

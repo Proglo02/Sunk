@@ -7,7 +7,12 @@ public class DestroyBallTrigger : MonoBehaviour
     {
         if(other.CompareTag("Ball"))
         {
-            BallManager.Instance.DestroyBall(other.gameObject);
+            DestroyBall(other.gameObject);
         }
+    }
+
+    protected virtual void DestroyBall(GameObject ball)
+    {
+        BallManager.Instance.DestroyBall(ball);
     }
 }
