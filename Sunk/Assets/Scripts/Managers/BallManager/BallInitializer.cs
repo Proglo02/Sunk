@@ -6,28 +6,34 @@ public class BallInitializer : MonoBehaviour
     [SerializeField] private GameObject ballObject;
     [SerializeField] private GameObject cueBallObject;
 
-    public void InitializeBall(BallLayoutData data)
+    public void InstantiateBall(BallLayoutData data)
     {
-        switch(data.Ball.Data.BallType)
+        InstantiateBall(data.Ball.Data, data.Position, data.Rotation);
+    }
+
+    public void InstantiateBall(BallData data, Vector3 position, Quaternion rotation)
+    {
+        switch (data.BallType)
         {
             case BallType.Cue:
-            {
-                CueBallObject cueBall = Instantiate(cueBallObject, data.Position, data.Rotation).GetComponent<CueBallObject>();
-                cueBall.BallData = data.Ball.Data;
-                cueBall.SetMaterial(data.Ball.Data.Material);
-                cueBall.transform.parent = transform;
-                BallManager.Instance.AddBall(cueBall);
-                BallManager.Instance.AddCueBall(cueBall);
-            }break;
+                {
+                    CueBallObject cueBall = Instantiate(cueBallObject, position, rotation).GetComponent<CueBallObject>();
+                    cueBall.BallData = data;
+                    cueBall.SetMaterial(data.Material);
+                    cueBall.transform.parent = transform;
+                    BallManager.Instance.AddBall(cueBall);
+                    BallManager.Instance.AddCueBall(cueBall);
+                }
+                break;
             default:
-            {
-                BallObject newBall = Instantiate(ballObject, data.Position, data.Rotation).GetComponent<BallObject>();
-                newBall.BallData = data.Ball.Data;
-                newBall.SetMaterial(data.Ball.Data.Material);
-                newBall.transform.parent = transform;
-                BallManager.Instance.AddBall(newBall);
-            }break;
-
+                {
+                    BallObject newBall = Instantiate(ballObject, position, rotation).GetComponent<BallObject>();
+                    newBall.BallData = data;
+                    newBall.SetMaterial(data.Material);
+                    newBall.transform.parent = transform;
+                    BallManager.Instance.AddBall(newBall);
+                }
+                break;
         }
     }
 }

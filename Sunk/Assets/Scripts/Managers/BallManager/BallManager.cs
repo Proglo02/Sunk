@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,14 +11,18 @@ public class BallManager : Singleton<BallManager>
     [SerializeField] private BallLayout ballLayout;
     [SerializeField] private GameObject confettiPrefab;
 
-    [HideInInspector] public UnityEvent OnAllBallsStopped = new UnityEvent();
-    [HideInInspector] public UnityEvent<BallObject> OnBallDestroyed = new UnityEvent<BallObject>();
-    [HideInInspector] public UnityEvent<BallObject, Pocket> OnBallSunk = new UnityEvent<BallObject, Pocket>();
+    [HideInInspector] public UnityEvent OnAllBallsStopped               = new UnityEvent();
+    [HideInInspector] public UnityEvent OnCueBallAdded                  = new UnityEvent();
+    [HideInInspector] public UnityEvent<BallObject> OnBallDestroyed     = new UnityEvent<BallObject>();
+    [HideInInspector] public UnityEvent<BallObject, Pocket> OnBallSunk  = new UnityEvent<BallObject, Pocket>();
     public CueBallObject CueBall { get; private set; }
 
     private BallInitializer ballInitializer;
     private List<BallObject> ballObjects = new List<BallObject>();
     private Coroutine ballMovementCheckCoroutine;
+
+    private BallData savedCueBallData;
+    private Vector3 lastSafeCueBallPosition;
 
     protected override void Awake()
     {
@@ -27,11 +33,11 @@ public class BallManager : Singleton<BallManager>
     /// <summary>
     /// Initializes all balls from the set layout
     /// </summary>
-    public void InitalizeBalls()
+    public void InstantiateBalls()
     {
         foreach (var layoutData in ballLayout.Balls)
         {
-            ballInitializer.InitializeBall(layoutData);
+            ballInitializer.InstantiateBall(layoutData);
         }
     }
 
@@ -54,7 +60,9 @@ public class BallManager : Singleton<BallManager>
         if(!CueBall)
         {
             CueBall = cueBall;
+            savedCueBallData = CueBall.BallData;
             CueBall.OnBallFired.AddListener(OnBallFired);
+            OnCueBallAdded.Invoke();
         }
     }
 
@@ -99,9 +107,8 @@ public class BallManager : Singleton<BallManager>
 
         if (ballObject.BallData.BallType == BallType.Cue)
         {
-            CueBall.Disable();
-            OnBallDestroyed.Invoke(ballObject);
-            return;
+            lastSafeCueBallPosition = CueBall.LastSafeLocation;
+            StartCoroutine(ResetCueball());
         }
 
         if (ballObjects.Contains(ballObject))
@@ -139,6 +146,27 @@ public class BallManager : Singleton<BallManager>
             ballMovementCheckCoroutine = StartCoroutine(BallMovementCheck());
     }
 
+    private void InstantiateCueBall()
+    {
+        Collider[] colliders = Physics.OverlapSphere(lastSafeCueBallPosition, .3f);
+
+        bool overlapingBall = false;
+
+        foreach(var collider in colliders)
+        {
+            if(collider.CompareTag("Ball"))
+            {
+                overlapingBall = true;
+                break;
+            }
+        }
+
+        if (overlapingBall)
+            lastSafeCueBallPosition += new Vector3(0f, 1f, 0f);
+
+        ballInitializer.InstantiateBall(savedCueBallData, lastSafeCueBallPosition, Quaternion.identity);
+    }
+
     private IEnumerator BallMovementCheck()
     {
         yield return new WaitForSeconds(.1f);
@@ -150,5 +178,18 @@ public class BallManager : Singleton<BallManager>
 
         ballMovementCheckCoroutine = null;
         OnAllBallsStopped.Invoke();
+    }
+
+    private IEnumerator ResetCueball()
+    {
+        if (!GameManager.Instance.isGameOver)
+        {
+            while (IsAnyBallMoving())
+            {
+                yield return new WaitForEndOfFrame();
+            }
+
+            InstantiateCueBall();
+        }
     }
 }

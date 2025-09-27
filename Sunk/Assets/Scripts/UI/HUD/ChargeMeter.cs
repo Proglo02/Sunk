@@ -9,12 +9,17 @@ public class ChargeMeter : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(BindCueBallEvents());
+        BindEvents();
     }
 
     private void Update()
     {
         SetFill();
+    }
+
+    private void BindEvents()
+    {
+        BallManager.Instance.OnCueBallAdded.AddListener(OnCueBallAdded);
     }
 
     private void SetFill()
@@ -29,6 +34,12 @@ public class ChargeMeter : MonoBehaviour
         fill.rectTransform.sizeDelta = new Vector2(100, 350 * percentCharge);
     }
 
+    private void OnCueBallAdded()
+    {
+        BallManager.Instance.CueBall.OnBallFired.AddListener(OnBallFired);
+        BallManager.Instance.CueBall.OnBallCharging.AddListener(OnBallCharging);
+    }
+
     private void OnBallFired()
     {
         meter.SetActive(false);
@@ -37,14 +48,5 @@ public class ChargeMeter : MonoBehaviour
     private void OnBallCharging()
     {
         meter.SetActive(true);
-    }
-
-    private IEnumerator BindCueBallEvents()
-    {
-        while (!BallManager.Instance.CueBall)
-            yield return new WaitForEndOfFrame();
-
-        BallManager.Instance.CueBall.OnBallFired.AddListener(OnBallFired);
-        BallManager.Instance.CueBall.OnBallCharging.AddListener(OnBallCharging);
     }
 }

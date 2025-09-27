@@ -28,8 +28,6 @@ public abstract class GameManager : Singleton<GameManager>
 
         GetComponents();
         BindEvents();
-
-        StartCoroutine(BindCueBallEvents());
     }
 
     private void Start()
@@ -57,7 +55,7 @@ public abstract class GameManager : Singleton<GameManager>
 
     protected virtual void StartGame()
     {
-        BallManager.Instance.InitalizeBalls();
+        BallManager.Instance.InstantiateBalls();
         PlayerManager.Instance.ActivatePlayer();
     }
 
@@ -90,6 +88,7 @@ public abstract class GameManager : Singleton<GameManager>
     {
         BallManager.Instance.OnAllBallsStopped.AddListener(OnAllBallsStopped);
         BallManager.Instance.OnBallSunk.AddListener(OnBallSunk);
+        BallManager.Instance.OnCueBallAdded.AddListener(OnCueBallAdded);
     }
 
     private void OnBallFired()
@@ -97,11 +96,8 @@ public abstract class GameManager : Singleton<GameManager>
         PlayerManager.Instance.DeactivatePlayer();
     }
 
-    private IEnumerator BindCueBallEvents()
+    private void OnCueBallAdded()
     {
-        while (!BallManager.Instance.CueBall)
-            yield return new WaitForEndOfFrame();
-
         BallManager.Instance.CueBall.OnBallFired.AddListener(OnBallFired);
     }
 }

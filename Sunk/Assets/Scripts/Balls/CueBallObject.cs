@@ -17,11 +17,9 @@ public class CueBallObject : BallObject
 
     public float ShootForce { get; private set; } = 0f;
     public bool IsCharging { get; private set; } = false;
-
+    public Vector3 LastSafeLocation { get; private set; }
 
     private int aimAngle = 180;
-    private bool isDisabled = false;
-    private Vector3 lastSafeLocation;
 
     protected override void Awake()
     {
@@ -33,7 +31,13 @@ public class CueBallObject : BallObject
     {
         SetAimTargetPosition();
         aimTarget.SetLine();
-        lastSafeLocation = transform.position;
+        LastSafeLocation = transform.position;
+    }
+
+    private void OnDestroy()
+    {
+        OnBallFired.RemoveAllListeners();
+        OnBallCharging.RemoveAllListeners();
     }
 
     /// <summary>
@@ -88,17 +92,6 @@ public class CueBallObject : BallObject
         SetAimAngle(angle);
     }
 
-    public void Disable()
-    {
-        rigidBody.velocity = Vector3.zero;
-        rigidBody.angularVelocity = Vector3.zero;
-        rigidBody.Sleep();
-        gameObject.SetActive(false);
-        IsMoving = false;
-
-        isDisabled = true;
-    }
-
     private void BindEvents()
     {
         BallManager.Instance.OnAllBallsStopped.AddListener(OnAllBallsStopped);
@@ -109,39 +102,11 @@ public class CueBallObject : BallObject
         if(GameManager.Instance.isGameOver)
             return;
 
-        //If the ball was pocketed, try to reset it to the last safe location
-        if (isDisabled)
-            TrySetSafeLocation();
-        else
-            lastSafeLocation = transform.position;
+        LastSafeLocation = transform.position;
 
         aimTarget.gameObject.SetActive(true);
         SetAimTargetPosition();
         aimTarget.SetLine();
-    }
-
-    private void TrySetSafeLocation()
-    {
-        Collider[] colliders = Physics.OverlapSphere(lastSafeLocation, .3f);
-
-        if (colliders.Length > 0)
-        {
-            foreach (var collider in colliders)
-            {
-                if (collider.CompareTag("Ball"))
-                {
-                    transform.position = lastSafeLocation + new Vector3(0f, 1f, 0f);
-                    break;
-                }
-            }
-
-            transform.position = lastSafeLocation;
-        }
-        else
-            transform.position = lastSafeLocation;
-
-        gameObject.SetActive(true);
-        isDisabled = false;
     }
 
     private void SetAimTargetPosition()
