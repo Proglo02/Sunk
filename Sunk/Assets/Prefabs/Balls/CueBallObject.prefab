@@ -359,6 +359,8 @@ MonoBehaviour:
   maxShootForce: 10
   chargeSpeed: 5
   minShootForce: 0
+  rotationSpeedDegree: 40
+  rotationSpeedCardinal: 4
   OnBallFired:
     m_PersistentCalls:
       m_Calls: []

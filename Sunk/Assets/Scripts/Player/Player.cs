@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class Player : MonoBehaviour
 {
@@ -40,10 +41,15 @@ public class Player : MonoBehaviour
     /// </summary>
     public void OnRotateStep(InputAction.CallbackContext context)
     {
-        if (!context.started || !isActive)
+        if (!isActive)
             return;
 
-        BallManager.Instance.CueBall.SetAimDegree(context);
+        if (context.started)
+            BallManager.Instance.CueBall.SetAimDegree(context);
+        else if (context.canceled)
+            BallManager.Instance.CueBall.CancelRotate();
+        else if (context.interaction is HoldInteraction)
+            BallManager.Instance.CueBall.DoAimDegreeRotate(context);
     }
 
     /// <summary>
@@ -51,10 +57,15 @@ public class Player : MonoBehaviour
     /// </summary>
     public void OnRotateCardinal(InputAction.CallbackContext context)
     {
-        if (!context.started || !isActive)
+        if (!isActive)
             return;
 
-        BallManager.Instance.CueBall.SetAimCardinal(context);
+        if (context.started)
+            BallManager.Instance.CueBall.SetAimCardinal(context);
+        else if (context.canceled)
+            BallManager.Instance.CueBall.CancelRotate();
+        else if (context.interaction is HoldInteraction)
+            BallManager.Instance.CueBall.DoAimCardinalRotation(context);
     }
 
     /// <summary>
@@ -79,7 +90,7 @@ public class Player : MonoBehaviour
     {
         float speed = BallManager.Instance.GetFastestBallSpeed();
 
-        if (context.started && speed < 10f && BallManager.Instance.IsAnyBallMoving())
+        if (context.started && speed < 0f && BallManager.Instance.IsAnyBallMoving())
             GameManager.Instance.StartFastForward();
         else if (context.canceled)
             GameManager.Instance.StopFastForward();

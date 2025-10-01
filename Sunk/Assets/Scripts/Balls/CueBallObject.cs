@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using System.Collections;
+using System;
 
 public class CueBallObject : BallObject
 {
@@ -12,6 +13,10 @@ public class CueBallObject : BallObject
     [SerializeField] private float chargeSpeed;
     [SerializeField] private float minShootForce;
 
+    [Header("Aim Rotation")]
+    [SerializeField] private float rotationSpeedDegree = 1;
+    [SerializeField] private float rotationSpeedCardinal = 1;
+
     [HideInInspector] public UnityEvent OnBallFired = new UnityEvent();
     [HideInInspector] public UnityEvent OnBallCharging = new UnityEvent();
 
@@ -19,7 +24,10 @@ public class CueBallObject : BallObject
     public bool IsCharging { get; private set; } = false;
     public Vector3 LastSafeLocation { get; private set; }
 
-    private int aimAngle = 180;
+    private float aimAngle = 180;
+
+    private Coroutine degreeRotation;
+    private Coroutine cardinalRotation;
 
     protected override void Awake()
     {
@@ -71,7 +79,7 @@ public class CueBallObject : BallObject
         if (IsCharging)
             return;
 
-        int value = context.ReadValue<float>() > 0 ? 1 : -1;
+        float value = context.ReadValue<float>() > 0 ? .5f : -.5f;
         SetAimAngle(aimAngle + value);
     }
 
@@ -84,12 +92,55 @@ public class CueBallObject : BallObject
             return;
 
         int value = context.ReadValue<float>() > 0 ? 1 : -1;
-        int angle = aimAngle;
+        int angle = (int)aimAngle;
         angle /= 45;
         angle = aimAngle % 45 != 0 ? angle + (int)((value + 1) * .5f) : angle + value;
         angle *= 45;
 
         SetAimAngle(angle);
+    }
+
+    /// <summary>
+    /// Rotates the aim angle by 1 degree over time
+    /// </summary>
+    public void DoAimDegreeRotate(InputAction.CallbackContext context)
+    {
+        if (IsCharging)
+            return;
+
+        if (degreeRotation == null)
+            degreeRotation = StartCoroutine(RotateDegree(context));
+    }
+
+    /// <summary>
+    /// Rotates the aim angle to the closest cardinal direction (0, 45, 90, etc) over time
+    /// </summary>
+    /// <param name="context"></param>
+    public void DoAimCardinalRotation(InputAction.CallbackContext context)
+    {
+        if (IsCharging)
+            return;
+
+        if (cardinalRotation == null)
+            cardinalRotation = StartCoroutine(RotateCardinal(context));
+    }
+
+    /// <summary>
+    /// Stops any on going rotation of the aim angle
+    /// </summary>
+    public void CancelRotate()
+    {
+        if (degreeRotation != null)
+        {
+            StopCoroutine(degreeRotation);
+            degreeRotation = null;
+        }
+
+        if(cardinalRotation != null)
+        {
+            StopCoroutine(cardinalRotation);
+            cardinalRotation = null;
+        }
     }
 
     private void BindEvents()
@@ -123,6 +174,24 @@ public class CueBallObject : BallObject
         aimTarget.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
+    private void AddForce(Vector3 force)
+    {
+        rigidBody.AddForce(force, ForceMode.Impulse);
+    }
+
+    private void SetAimAngle(float angle)
+    {
+        if (angle > 359f)
+            aimAngle = angle % 360f;
+        else if (angle < 0f)
+            aimAngle = (angle % 360f) + 360f;
+        else
+            aimAngle = angle;
+
+        SetAimTargetPosition();
+        aimTarget.SetLine();
+    }
+
     private IEnumerator ChargeShootForce()
     {
         IsCharging = true;
@@ -130,7 +199,7 @@ public class CueBallObject : BallObject
 
         int chargeDirection = 1;
 
-        while(IsCharging)
+        while (IsCharging)
         {
             ShootForce += Time.deltaTime * chargeDirection * chargeSpeed;
 
@@ -145,21 +214,23 @@ public class CueBallObject : BallObject
         ShootForce = 0;
     }
 
-    private void AddForce(Vector3 force)
+    private IEnumerator RotateDegree(InputAction.CallbackContext context)
     {
-        rigidBody.AddForce(force, ForceMode.Impulse);
+        while(true)
+        {
+            SetAimDegree(context);
+
+            yield return new WaitForSeconds(1 / rotationSpeedDegree);
+        }
     }
 
-    private void SetAimAngle(int angle)
+    private IEnumerator RotateCardinal(InputAction.CallbackContext context)
     {
-        if (angle > 359)
-            aimAngle = angle % 360;
-        else if (angle < 0)
-            aimAngle = (angle % 360) + 360;
-        else
-            aimAngle = angle;
+        while (true)
+        {
+            SetAimCardinal(context);
 
-        SetAimTargetPosition();
-        aimTarget.SetLine();
+            yield return new WaitForSeconds(1 / rotationSpeedCardinal);
+        }
     }
 }
