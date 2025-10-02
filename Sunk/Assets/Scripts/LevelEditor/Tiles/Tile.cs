@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public enum TileType
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Default,
+    Ramp,
+    Corner,
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public enum TileDirection
+{
+    North,
+    East,
+    South,
+    West
+}
+
+[Serializable]
+[CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile", order = 1)]
+public class Tile : ScriptableObject
+{
+    [SerializeField] private TileType tileType;
+    [SerializeField] private TileDirection tileDirection;
 }
