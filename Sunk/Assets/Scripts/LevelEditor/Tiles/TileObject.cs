@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [SelectionBase]
 public class TileObject : MonoBehaviour
 {
-    [SerializeField] public Vector3 Position;
+    [HideInInspector] public Vector3 Position;
 }
