@@ -1,11 +1,19 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public enum TileType
 {
     Default,
-    Ramp,
-    Corner,
+    Slope,
+}
+
+public enum SubTileTypeSlope
+{
+    Default,
+    CornerTop,
+    CornerMiddle,
+    CornerBottom,
 }
 
 public enum TileDirection
@@ -17,9 +25,11 @@ public enum TileDirection
 }
 
 [Serializable]
-[CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile", order = 1)]
-public class Tile : ScriptableObject
+public class Tile
 {
-    [SerializeField] private TileType tileType;
-    [SerializeField] private TileDirection tileDirection;
+    public TileType TileType;
+    public int SubTileType;
+    public TileDirection tileDirection;
+
+    [SerializeReference] public GameObject SubTileObject;
 }

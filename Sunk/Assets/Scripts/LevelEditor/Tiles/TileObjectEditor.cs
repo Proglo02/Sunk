@@ -1,6 +1,5 @@
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 [CanEditMultipleObjects]
@@ -15,31 +14,31 @@ public class TileObjectEditor : Editor
         public Vector3 LastPosition;
     }
 
-    GameObject tileBase;
-    TileMoveInfo[] moveInfos;
-    Vector3 moveDirection;
+    private TileManager tileManager;
+    private TileMoveInfo[] moveInfos;
+    private Vector3 moveDirection;
 
-    Vector3 savedSnap;
-    Vector3 savedGridSize;
-    bool savedGridEnabled;
+    private Vector3 savedSnap;
+    private Vector3 savedGridSize;
+    private bool savedGridEnabled;
 
     private bool wasUndoRedo = false;
 
     private void OnEnable()
     {
-        tileBase = GameObject.FindGameObjectWithTag("TileBase");
+        tileManager = FindObjectOfType<TileManager>();
 
-        if (!tileBase)
+        if (!tileManager)
         {
-            tileBase = new GameObject();
-            tileBase.tag = "TileBase";
-            tileBase.name = "TileBase";
+            tileManager = new TileManager();
+            tileManager.tag = "TileManager";
+            tileManager.name = "TileManager";
         }
 
         Transform transform = target.GetComponent<Transform>();
 
         if (!transform.parent)
-            transform.parent = tileBase.transform;
+            transform.parent = tileManager.transform;
 
         int length = targets.Length;
         moveInfos = new TileMoveInfo[length];
@@ -72,11 +71,17 @@ public class TileObjectEditor : Editor
         EditorSnapSettings.gridSnapEnabled = savedGridEnabled;
     }
 
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+    }
+
     public void OnSceneGUI()
     {
         EditorSnapSettings.move = new Vector3(1f, 0.5f, 1f);
         EditorSnapSettings.gridSize = new Vector3(1f, 0.5f, 1f);
         EditorSnapSettings.gridSnapEnabled = true;
+        Tools.current = Tool.Move;
 
         Event e = Event.current;
 
@@ -99,7 +104,7 @@ public class TileObjectEditor : Editor
             {
                 moveInfos[i].Transform.position = moveInfos[i].Position;
                 moveInfos[i].LastPosition = moveInfos[i].Position;
-                EditorUtility.SetDirty((TileObject)target);
+                EditorUtility.SetDirty(moveInfos[i].TileObject);
             }
         }
         else if (moveInfos[0].LastPosition != moveInfos[0].Transform.position)
@@ -111,7 +116,7 @@ public class TileObjectEditor : Editor
                     moveInfos[i].LastPosition = moveInfos[i].Transform.position;
                     moveInfos[i].Position = moveInfos[i].LastPosition;
                     moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
-                    EditorUtility.SetDirty((TileObject)target);
+                    EditorUtility.SetDirty(moveInfos[i].TileObject);
                 }
                 return;
             }
@@ -152,7 +157,7 @@ public class TileObjectEditor : Editor
                 moveInfos[i].LastPosition = moveInfos[i].Transform.position;
                 moveInfos[i].Position = moveInfos[i].LastPosition;
                 moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
-                EditorUtility.SetDirty((TileObject)target);
+                EditorUtility.SetDirty(moveInfos[i].TileObject);
             }
             else
             {
@@ -172,7 +177,7 @@ public class TileObjectEditor : Editor
                 moveInfos[i].LastPosition = moveInfos[i].Transform.position;
                 moveInfos[i].Position = moveInfos[i].LastPosition;
                 moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
-                EditorUtility.SetDirty((TileObject)target);
+                EditorUtility.SetDirty(moveInfos[i].TileObject);
             }
         }
         Debug.Log("Moved");
@@ -240,7 +245,7 @@ public class TileObjectEditor : Editor
             moveInfos[i].LastPosition = moveInfos[i].Transform.position;
             moveInfos[i].Position = moveInfos[i].LastPosition;
             moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
-            EditorUtility.SetDirty((TileObject)target);
+            EditorUtility.SetDirty(moveInfos[i].TileObject);
         }
 
         Debug.Log("Redo");
@@ -281,6 +286,6 @@ public class TileObjectEditor : Editor
     {
         Object obj = Instantiate(target, position, Quaternion.identity);
         obj.name = "Tile";
-        obj.GetComponent<Transform>().parent = tileBase.transform;
+        obj.GetComponent<Transform>().parent = tileManager.transform;
     }
 }
