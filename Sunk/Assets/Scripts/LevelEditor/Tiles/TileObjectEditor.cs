@@ -12,13 +12,15 @@ public class TileObjectEditor : Editor
         public Transform Transform;
         public Vector3 Position;
         public Vector3 LastPosition;
+        public int YAngle;
     }
 
     private TileManager tileManager;
     private TileMoveInfo[] moveInfos;
     private Vector3 moveDirection;
 
-    private Vector3 savedSnap;
+    private Vector3 savedMove;
+    private float savedRotate;
     private Vector3 savedGridSize;
     private bool savedGridEnabled;
 
@@ -49,16 +51,15 @@ public class TileObjectEditor : Editor
             moveInfos[i].Transform = targets[i].GetComponent<Transform>();
             moveInfos[i].Position = moveInfos[i].Transform.position;
             moveInfos[i].LastPosition = moveInfos[i].Position;
+            moveInfos[i].YAngle = (int)moveInfos[i].Transform.localRotation.y;
 
             moveInfos[i].Transform.hideFlags = HideFlags.NotEditable;
         }
 
-        savedSnap = EditorSnapSettings.move;
+        savedMove = EditorSnapSettings.move;
         savedGridSize = EditorSnapSettings.gridSize;
+        savedRotate = EditorSnapSettings.rotate;
         savedGridEnabled = EditorSnapSettings.gridSnapEnabled;
-
-        Tools.current = Tool.Move;
-        Tools.pivotMode = PivotMode.Pivot;
 
         Undo.undoRedoPerformed += OnUndoRedo;
     }
@@ -66,7 +67,8 @@ public class TileObjectEditor : Editor
     private void OnDisable()
     {
         Undo.undoRedoPerformed -= OnUndoRedo;
-        EditorSnapSettings.move = savedSnap;
+        EditorSnapSettings.move = savedMove;
+        EditorSnapSettings.rotate = savedRotate;
         EditorSnapSettings.gridSize = savedGridSize;
         EditorSnapSettings.gridSnapEnabled = savedGridEnabled;
     }
@@ -79,11 +81,16 @@ public class TileObjectEditor : Editor
     public void OnSceneGUI()
     {
         EditorSnapSettings.move = new Vector3(1f, 0.5f, 1f);
+        EditorSnapSettings.rotate = 45;
         EditorSnapSettings.gridSize = new Vector3(1f, 0.5f, 1f);
         EditorSnapSettings.gridSnapEnabled = true;
-        Tools.current = Tool.Move;
 
-        Event e = Event.current;
+        Tools.pivotMode = PivotMode.Pivot;
+
+        if (Tools.current != Tool.Move)
+            Tools.current = Tool.Move;
+
+        Event currentEvent = Event.current;
 
         if (moveInfos[0].Transform.position.y < 0)
         {
@@ -95,7 +102,7 @@ public class TileObjectEditor : Editor
             }
         }
 
-        if (e.type == EventType.MouseUp && e.button == 0)
+        if (currentEvent.type == EventType.MouseUp && currentEvent.button == 0)
             moveDirection = Vector3.zero;
 
         if (moveInfos[0].LastPosition != moveInfos[0].Position)
@@ -109,13 +116,12 @@ public class TileObjectEditor : Editor
         }
         else if (moveInfos[0].LastPosition != moveInfos[0].Transform.position)
         {
-            if (!e.control)
+            if (!currentEvent.control)
             {
                 for (int i = 0; i < moveInfos.Length; i++)
                 {
                     moveInfos[i].LastPosition = moveInfos[i].Transform.position;
                     moveInfos[i].Position = moveInfos[i].LastPosition;
-                    moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
                     EditorUtility.SetDirty(moveInfos[i].TileObject);
                 }
                 return;
@@ -156,7 +162,6 @@ public class TileObjectEditor : Editor
 
                 moveInfos[i].LastPosition = moveInfos[i].Transform.position;
                 moveInfos[i].Position = moveInfos[i].LastPosition;
-                moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
                 EditorUtility.SetDirty(moveInfos[i].TileObject);
             }
             else
@@ -169,18 +174,16 @@ public class TileObjectEditor : Editor
                     return;
                 }
 
-                CreateTile(moveInfos[i].TileObject, moveInfos[i].LastPosition);
+                CreateTile(moveInfos[i].TileObject, moveInfos[i].LastPosition, moveInfos[i].Transform.rotation);
 
                 if (numTiles > 1)
                     moveInfos[i].Transform.position = moveInfos[i].LastPosition + direction;
 
                 moveInfos[i].LastPosition = moveInfos[i].Transform.position;
                 moveInfos[i].Position = moveInfos[i].LastPosition;
-                moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
                 EditorUtility.SetDirty(moveInfos[i].TileObject);
             }
         }
-        Debug.Log("Moved");
     }
 
     private void OnUndoRedo()
@@ -223,11 +226,8 @@ public class TileObjectEditor : Editor
 
             moveInfos[i].LastPosition = moveInfos[i].Transform.position;
             moveInfos[i].Position = moveInfos[i].LastPosition;
-            moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
             EditorUtility.SetDirty((TileObject)target);
         }
-
-        Debug.Log("Undo");
     }
 
     private void OnRedo()
@@ -239,16 +239,13 @@ public class TileObjectEditor : Editor
 
             for (int j = 0; j <= numTiles; j++)
             {
-                CreateTile(moveInfos[i].TileObject, moveInfos[i].Transform.position - direction * j);
+                CreateTile(moveInfos[i].TileObject, moveInfos[i].Transform.position - direction * j, moveInfos[i].Transform.rotation);
             }
 
             moveInfos[i].LastPosition = moveInfos[i].Transform.position;
             moveInfos[i].Position = moveInfos[i].LastPosition;
-            moveInfos[i].TileObject.Position = moveInfos[i].LastPosition;
             EditorUtility.SetDirty(moveInfos[i].TileObject);
         }
-
-        Debug.Log("Redo");
     }
 
     private bool CollisionCheck()
@@ -282,9 +279,9 @@ public class TileObjectEditor : Editor
         return false;
     }
 
-    private void CreateTile(Object target, Vector3 position)
+    private void CreateTile(Object target, Vector3 position, Quaternion rotation)
     {
-        Object obj = Instantiate(target, position, Quaternion.identity);
+        Object obj = Instantiate(target, position, rotation);
         obj.name = "Tile";
         obj.GetComponent<Transform>().parent = tileManager.transform;
     }

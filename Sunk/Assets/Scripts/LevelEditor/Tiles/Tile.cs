@@ -30,6 +30,4 @@ public class Tile
     public TileType TileType;
     public int SubTileType;
     public TileDirection tileDirection;
-
-    [SerializeReference] public GameObject SubTileObject;
 }

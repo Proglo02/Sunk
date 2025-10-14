@@ -32,7 +32,11 @@ public class TileDrawer : PropertyDrawer
         if (tileType != (TileType)tileTypeProp.enumValueIndex || subTileType != subTileTypeProp.intValue)
             OnTileTypeChanged(property, (TileType)tileTypeProp.enumValueIndex, subTileTypeProp.intValue);
 
+        TileDirection tileDirection = (TileDirection)tileDirectionProp.enumValueIndex;
         EditorGUI.PropertyField(new Rect(position.x, y, position.width, EditorGUIUtility.singleLineHeight), tileDirectionProp);
+
+        if (tileDirection != (TileDirection)tileDirectionProp.enumValueIndex)
+            OnRotationChanged(property, (TileDirection)tileDirectionProp.enumValueIndex);
 
         EditorGUI.EndProperty();
     }
@@ -66,20 +70,32 @@ public class TileDrawer : PropertyDrawer
 
     private void OnTileTypeChanged(SerializedProperty property, TileType tileType, int subTileType)
     {
-        Tile tile = fieldInfo.GetValue(property.serializedObject.targetObject) as Tile;
+        var subTileObjectProp = property.serializedObject.FindProperty("SubTileObject");
         TileObject tileObject = property.serializedObject.targetObject as TileObject;
 
+        GameObject subTileObject = subTileObjectProp.objectReferenceValue as GameObject;
         GameObject prefab = TileManager.GetSubTilePrefab(tileType, subTileType);
 
-        if (tile.SubTileObject != null && prefab == null)
-            GameObject.DestroyImmediate(tile.SubTileObject);
-        else if (prefab != null)
+        if (subTileObject != null)
         {
-            GameObject instance = PrefabUtility.InstantiatePrefab(prefab, tileObject.transform) as GameObject;
-            tile.SubTileObject = instance;
+            GameObject.DestroyImmediate(subTileObject);
+            subTileObjectProp.objectReferenceValue = null;
         }
 
-        EditorUtility.SetDirty(tileObject);
-        EditorSceneManager.MarkSceneDirty(tileObject.gameObject.scene);
+        if (prefab != null)
+        {
+            GameObject instance = PrefabUtility.InstantiatePrefab(prefab, tileObject.transform) as GameObject;
+
+            subTileObjectProp.objectReferenceValue = instance;
+        }
+    }
+
+    private void OnRotationChanged(SerializedProperty property, TileDirection direction)
+    {
+        var subTileObjectProp = property.serializedObject.FindProperty("SubTileObject");
+
+        GameObject subTileObject = subTileObjectProp.objectReferenceValue as GameObject;
+
+        subTileObject.transform.rotation = Quaternion.Euler(0, ((int)direction) * 90f, 0);
     }
 }
