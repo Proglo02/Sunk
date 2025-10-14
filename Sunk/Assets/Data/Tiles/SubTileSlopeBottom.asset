@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe0726412fc8c4c46a20d612315d4e22, type: 3}
   m_Name: SubTileSlopeBottom
   m_EditorClassIdentifier: 
-  subTilePrefab: {fileID: 3691612058348575404, guid: ec8c231c3ae2a524998095e765618c13,
+  subTilePrefab: {fileID: 3691612058348575404, guid: 471de771ac44b8340aaf3f039fae3dbe,
     type: 3}
   TileType: 1
   SubType: 3
