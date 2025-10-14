@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 39ad9dab3cc6b5f468eca77bc079e6e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,4 +150,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bffc6bdb40f7ce4d804185d0b958eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Position: {x: 1, y: 0, z: -1}
+  Tile:
+    rid: 8924332693070807049
+  references:
+    version: 2
+    RefIds:
+    - rid: 8924332693070807049
+      type: {class: Tile, ns: , asm: Assembly-CSharp}
+      data:
+        TileType: 0
+        SubTileType: 0
+        TileDirection: 0

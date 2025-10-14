@@ -37,10 +37,13 @@ public class TileObjectEditor : Editor
             tileManager.name = "TileManager";
         }
 
-        Transform transform = target.GetComponent<Transform>();
+        if (EditorUtility.IsPersistent(Selection.activeObject) && target.IsPrefabInstance())
+        {
+            Transform transform = target.GetComponent<Transform>();
 
-        if (!transform.parent)
-            transform.parent = tileManager.transform;
+            if (!transform.parent)
+                transform.parent = tileManager.transform;
+        }
 
         int length = targets.Length;
         moveInfos = new TileMoveInfo[length];
