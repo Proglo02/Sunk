@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+[Serializable]
+public enum TileType
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Default,
+    Slope,
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public enum SubTileTypeSlope
+{
+    Default,
+    CornerTop,
+    CornerMiddle,
+    CornerBottom,
+}
+
+public enum TileDirection
+{
+    North,
+    East,
+    South,
+    West
+}
+
+[Serializable]
+public class Tile
+{
+    public TileType TileType;
+    public int SubTileType;
+    public TileDirection TileDirection;
 }
