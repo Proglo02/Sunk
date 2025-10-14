@@ -1,6 +1,6 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CustomPropertyDrawer(typeof(Tile))]
@@ -14,7 +14,7 @@ public class TileDrawer : PropertyDrawer
 
         var tileTypeProp = property.FindPropertyRelative("TileType");
         var subTileTypeProp = property.FindPropertyRelative("SubTileType");
-        var tileDirectionProp = property.FindPropertyRelative("tileDirection");
+        var tileDirectionProp = property.FindPropertyRelative("TileDirection");
 
         var lineHeight = EditorGUIUtility.singleLineHeight + 2;
         var y = position.y;
@@ -71,31 +71,24 @@ public class TileDrawer : PropertyDrawer
     private void OnTileTypeChanged(SerializedProperty property, TileType tileType, int subTileType)
     {
         var subTileObjectProp = property.serializedObject.FindProperty("SubTileObject");
-        TileObject tileObject = property.serializedObject.targetObject as TileObject;
+        UnityEngine.Object[] targets = property.serializedObject.targetObjects;
 
-        GameObject subTileObject = subTileObjectProp.objectReferenceValue as GameObject;
-        GameObject prefab = TileManager.GetSubTilePrefab(tileType, subTileType);
-
-        if (subTileObject != null)
+        foreach (var target in targets)
         {
-            GameObject.DestroyImmediate(subTileObject);
-            subTileObjectProp.objectReferenceValue = null;
-        }
-
-        if (prefab != null)
-        {
-            GameObject instance = PrefabUtility.InstantiatePrefab(prefab, tileObject.transform) as GameObject;
-
-            subTileObjectProp.objectReferenceValue = instance;
+            TileObject tileObject = target.GetComponent<TileObject>();
+            tileObject.OnTileTypeChanged(tileType, subTileType);
         }
     }
 
     private void OnRotationChanged(SerializedProperty property, TileDirection direction)
     {
         var subTileObjectProp = property.serializedObject.FindProperty("SubTileObject");
+        UnityEngine.Object[] targets = property.serializedObject.targetObjects;
 
-        GameObject subTileObject = subTileObjectProp.objectReferenceValue as GameObject;
-
-        subTileObject.transform.rotation = Quaternion.Euler(0, ((int)direction) * 90f, 0);
+        foreach (var target in targets)
+        {
+            TileObject tileObject = target.GetComponent<TileObject>();
+            tileObject.OnRotationChanged(direction);
+        }
     }
 }

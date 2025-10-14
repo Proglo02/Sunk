@@ -158,6 +158,12 @@ public class TileObjectEditor : Editor
                 scale.y += direction.y;
                 scale.y = Mathf.Max(1f, scale.y);
 
+                if (moveInfos[i].Transform.childCount > 1)
+                {
+                    GameObject subTileObject = moveInfos[i].Transform.GetChild(1).gameObject;
+                    subTileObject.transform.localScale = new Vector3(.5f, .5f / scale.y, .5f);
+                }
+
                 moveInfos[i].Transform.localScale = scale;
 
                 moveInfos[i].LastPosition = moveInfos[i].Transform.position;
@@ -284,5 +290,6 @@ public class TileObjectEditor : Editor
         Object obj = Instantiate(target, position, rotation);
         obj.name = "Tile";
         obj.GetComponent<Transform>().parent = tileManager.transform;
+        obj.GetComponent<TileObject>().OnCreate();
     }
 }
