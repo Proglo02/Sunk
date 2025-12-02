@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public enum FoulType
 {
@@ -99,5 +100,15 @@ public abstract class GameManager : Singleton<GameManager>
     private void OnCueBallAdded()
     {
         BallManager.Instance.CueBall.OnBallFired.AddListener(OnBallFired);
+    }
+
+
+
+    // The Okkon programmer move: i added a way to reload scene lol
+
+    public void ReloadScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 }

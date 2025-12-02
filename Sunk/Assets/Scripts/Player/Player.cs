@@ -100,4 +100,11 @@ public class Player : MonoBehaviour
     {
         isActive = active;
     }
+
+    public void ReloadScene(InputAction.CallbackContext context)
+    {
+        if (!GameManager.Instance || !context.started)
+            { return; }
+        GameManager.Instance.ReloadScene();
+    }
 }
